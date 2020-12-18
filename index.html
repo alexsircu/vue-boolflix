@@ -12,17 +12,17 @@
     <div id="root">
       <header>
         <h1 id="logo">BOOLFLIX</h1>
-        <input type="text" name="" value="" placeholder="Cerca il film" id="search-bar">
+        <input type="text" name="" value="" placeholder="Cerca il film" id="search-bar" v-model="filmToSearch" @keydown.enter="searchFilm">
       </header>
 
       <main id="main">
         <div class="cards-container">
-          <div class="card">
-            <img src="https://pad.mymovies.it/filmclub/2011/05/035/locandina.jpg" alt="">
+          <div v-for="film in filmsArray" class="card">
+            <img :src="prefixOfFilmUrl + film.backdrop_path" alt="">
 
             <ul id="info-list-card">
-              <li>Titolo: Django Unchained</li>
-              <li>Titolo originale: Django Unchained</li>
+              <li>Titolo: {{film.title}}</li>
+              <li>Titolo originale: {{film.original_title}}</li>
               <li>Voto:
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -30,7 +30,7 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
               </li>
-              <li>Overview: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus voluptatum molestiae similique perspiciatis porro doloribus ex asperiores dolores veniam? Reprehenderit inventore, repudiandae ipsam! Illo tenetur, facilis sapiente distinctio debitis porro. </li>
+              <li>Overview: {{film.overview}}</li>
             </ul>
 
           </div>
