@@ -18,7 +18,7 @@
       <main id="main">
         <div class="cards-container">
           <div v-for="(film, index) in filmsArray" class="card">
-            <img :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title">
+            <img :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title" class="background-img-cover">
 
             <ul id="info-list-card">
               <li>Titolo: {{film.title}}</li>
@@ -26,6 +26,10 @@
               <li>Voto:
                 <i v-for="vote in averageVoteArray[index]" class="fas fa-star"></i>
                 <i v-for="vote in (5 - averageVoteArray[index])" class="far fa-star"></i>
+              </li>
+              <li>Lingua:
+                <img v-if="film.original_language == 'en' || film.original_language == 'it' || film.original_language == 'de'" :src="film.flagLanguage" :alt="film.original_language">
+                <span v-else>{{film.original_language}}</span>
               </li>
               <li>Overview: {{film.overview}}</li>
             </ul>

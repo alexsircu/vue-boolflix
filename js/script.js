@@ -4,7 +4,8 @@ var app = new Vue({
     filmToSearch: "",
     prefixOfFilmUrl: "https://image.tmdb.org/t/p/w220_and_h330_face/",
     filmsArray: [],
-    averageVoteArray: []
+    averageVoteArray: [],
+    flagLanguage: ""
 
   },
   methods: {
@@ -25,8 +26,21 @@ var app = new Vue({
             let averageCeilVote = Math.ceil(self.filmsArray[i].vote_average/2);
             self.averageVoteArray.push(averageCeilVote)
           }
+          self.toFlagLanguage();
         })
       self.filmToSearch = "";
+    },
+    toFlagLanguage: function() {
+      for (var i = 0; i < this.filmsArray.length; i++) {
+        let filmLanguage = this.filmsArray[i].original_language;
+        if (filmLanguage == "en") {
+          this.filmsArray[i].flagLanguage = "https://upload.wikimedia.org/wikipedia/commons/f/f2/Flag_of_Great_Britain_%281707%E2%80%931800%29.svg";
+        } else if (filmLanguage == "it") {
+          this.filmsArray[i].flagLanguage = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/1200px-Flag_of_Italy.svg.png";
+        } else if (filmLanguage == "de") {
+          this.filmsArray[i].flagLanguage = "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg";
+        }
+      }
     }
   }
 });
