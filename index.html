@@ -17,18 +17,15 @@
 
       <main id="main">
         <div class="cards-container">
-          <div v-for="film in filmsArray" class="card">
-            <img :src="prefixOfFilmUrl + film.backdrop_path" alt="">
+          <div v-for="(film, index) in filmsArray" class="card">
+            <img :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title">
 
             <ul id="info-list-card">
               <li>Titolo: {{film.title}}</li>
               <li>Titolo originale: {{film.original_title}}</li>
               <li>Voto:
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
+                <i v-for="vote in averageVoteArray[index]" class="fas fa-star"></i>
+                <i v-for="vote in (5 - averageVoteArray[index])" class="far fa-star"></i>
               </li>
               <li>Overview: {{film.overview}}</li>
             </ul>
