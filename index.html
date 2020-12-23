@@ -12,17 +12,17 @@
     <div id="root">
       <header>
         <h1 id="logo">BOOLFLIX</h1>
-        <input type="text" name="" value="" placeholder="Cerca il film" id="search-bar" v-model="filmToSearch" @keydown.enter="searchFilm">
+        <input type="text" name="" value="" placeholder="Cerca il film" id="search-bar" v-model="filmToSearch" @keydown.enter="startFunctions">
       </header>
 
       <main id="main">
         <div class="cards-container">
-          <div v-for="(film, index) in filmsArray" class="card">
-            <img :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title" class="background-img-cover">
+          <div v-for="(film, index) in filmsSeriesArray" class="card">
+            <img :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title || film.name" class="background-img-cover">
 
             <ul id="info-list-card">
-              <li>Titolo: {{film.title}}</li>
-              <li>Titolo originale: {{film.original_title}}</li>
+              <li>Titolo: {{film.title || film.name}}</li>
+              <li>Titolo originale: {{film.original_title || film.original_name}}</li>
               <li>Voto:
                 <i v-for="vote in averageVoteArray[index]" class="fas fa-star"></i>
                 <i v-for="vote in (5 - averageVoteArray[index])" class="far fa-star"></i>
