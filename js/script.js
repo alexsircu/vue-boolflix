@@ -3,6 +3,7 @@ var app = new Vue({
   data: {
     filmToSearch: "",
     prefixOfFilmUrl: "https://image.tmdb.org/t/p/w220_and_h330_face/",
+    placeHolderImage: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
     filmsArray: [],
     seriesArray: [],
     filmsSeriesArray: [],

@@ -18,7 +18,8 @@
       <main id="main">
         <div class="cards-container">
           <div v-for="(film, index) in filmsSeriesArray" class="card">
-            <img :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title || film.name" class="background-img-cover">
+            <img v-if="film.backdrop_path" :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title || film.name" class="background-img-cover">
+            <img v-else :src="placeHolderImage" :alt="film.title || film.name" class="background-img-cover">
 
             <ul id="info-list-card">
               <li>Titolo: {{film.title || film.name}}</li>
