@@ -17,7 +17,7 @@
 
       <main id="main">
         <div class="cards-container">
-          <div v-for="(film, index) in filmsSeriesArray" class="card">
+          <div v-for="(film, index) in newFilmsSeriesArray" class="card">
             <img v-if="film.backdrop_path" :src="prefixOfFilmUrl + film.backdrop_path" :alt="film.title || film.name" class="background-img-cover">
             <img v-else :src="placeHolderImage" :alt="film.title || film.name" class="background-img-cover">
 
@@ -32,13 +32,11 @@
                 <img v-if="film.original_language == 'en' || film.original_language == 'it' || film.original_language == 'de'" :src="film.flagLanguage" :alt="film.original_language">
                 <span v-else>{{film.original_language}}</span>
               </li>
+              <li>Attori: <p v-for="character in film.characters">{{character}} </p></li>
               <li>Overview: {{film.overview}}</li>
             </ul>
-
           </div>
-
         </div>
-
       </main>
     </div>
     <script src="js/script.js" charset="utf-8"></script>
