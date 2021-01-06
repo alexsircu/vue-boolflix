@@ -7,7 +7,9 @@
 #root {
   width: 100%;
   height: 100vh;
-  background-color: #434343;
+  background-color: #141414;
+  font-family: 'Kanit', sans-serif;
+
 }
 
 header {
@@ -17,16 +19,61 @@ header {
   width: 100%;
   height: 100px;
   background-color: black;
-  padding: 30px;
+  padding: 0px 60px;
+}
+
+#header-left {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.list-inline {
+  display: flex;
+  list-style: none;
+}
+
+.list-inline li {
+  font-size: 16px;
+  margin-right: 20px;
+}
+
+.list-inline li a {
+  text-decoration: none;
+  color: white;
 }
 
 #logo {
-  color: red;
+  max-height: 100%;
+  padding-right: 40px;
+}
+
+#header-right {
+  display: flex;
+  align-items: center;
+}
+
+#search-bar-container {
+  color: white;
+  margin-right: 20px;
+  border: 1px solid white;
+}
+
+#search-bar-container > i {
+  margin-left: 10px;
+  margin-right: 5px;
 }
 
 #search-bar {
-  font-size: 18px;
-  border-radius: 5px;
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  padding: 5px 0;
+  border: 0;
+}
+
+#search-bar::placeholder {
+  font-size: 16px;
 }
 
 #search-bar:focus {
@@ -35,7 +82,8 @@ header {
 
 #main {
   width: 100%;
-  background-color: #434343;
+  /* background-color: #434343; */
+  background-color: #141414;
 }
 
 .cards-container {
@@ -47,9 +95,10 @@ header {
 }
 
 .card {
+  position: relative;
   width: 220px;
   height: 330px;
-  border: solid lightgrey 3px;
+  border: solid lightgrey 2px;
   margin: 50px 20px;
   border-radius: 5px;
 }
@@ -60,12 +109,15 @@ header {
 }
 
 #info-list-card {
-  display: none;
+  position: absolute;
+  top: 0;
+  opacity: 0;
+  /* display: none; */
   list-style: none;
   width: 100%;
   height: 100%;
   padding: 30px 10px;
-  background-color: black;
+  /* background-color: black; */
   color: white;
   overflow: auto;
 }
@@ -75,14 +127,25 @@ header {
 }
 
 .card:hover .background-img-cover {
-  display: none;
+  /* display: none; */
+  opacity: 0.3;
 }
 
 .card:hover #info-list-card {
-  display: block;
+  /* display: block; */
+  opacity: 1;
 }
 
 #info-list-card li > img {
   width: 20px;
   height: 100%;
+}
+
+.card ::-webkit-scrollbar{
+  width: 3px;
+}
+
+.card ::-webkit-scrollbar-thumb{
+  background-color: lightgrey;
+  border-radius: 3px;
 }

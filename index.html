@@ -2,17 +2,41 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.css" integrity="sha512-f73UKwzP1Oia45eqHpHwzJtFLpvULbhVpEJfaWczo/ZCV5NWSnK4vLDnjTaMps28ocZ05RbI83k2RlQH92zy7A==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <title>Boolflix</title>
+    <title>Netflix</title>
   </head>
   <body>
     <div id="root">
       <header>
-        <h1 id="logo">BOOLFLIX</h1>
-        <input type="text" name="" value="" placeholder="Cerca il film" id="search-bar" v-model="filmToSearch" @keydown.enter="startFunctions">
+        <div id="header-left">
+            <img src="img/logo-netflix.png" alt="logo" id="logo">
+            <ul class="list-inline">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Serie TV</a></li>
+              <li><a href="#">Film</a></li>
+              <li><a href="#">Nuovi e popolari</a></li>
+              <li><a href="#">La mia lista</a></li>
+              <li><a href="#">Guarda di nuovo</a></li>
+            </ul>
+        </div>
+
+        <div id="header-right">
+          <div id="search-bar-container">
+            <i class="fas fa-search"></i>
+            <input type="text" name="" value="" placeholder="Cerca il film" id="search-bar" v-model="filmToSearch" @keydown.enter="startFunctions">
+          </div>
+
+          <ul class="list-inline">
+            <li><a href="#"><i class="fas fa-gift"></i></a></li>
+            <li><a href="#"><i class="fas fa-bell"></i></a></li>
+            <li><a href="#">USER</a></li>
+          </ul>
+        </div>
       </header>
 
       <main id="main">
