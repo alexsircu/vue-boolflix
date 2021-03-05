@@ -5,8 +5,43 @@ var app = new Vue({
     prefixOfFilmUrl: "https://image.tmdb.org/t/p/w220_and_h330_face/",
     placeHolderImage: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
     filmsSeriesArray: [],
-    flagLanguage: ""
+    flagLanguage: "",
+    genres: {},
+    selectedGenre: ""
+  },
+  mounted: function() {
 
+    const self = this;
+
+    axios
+      .get('https://api.themoviedb.org/3/genre/movie/list', {
+        params: {
+          api_key: '5f1d9b533544f75b3d29837feba9a687'
+        }
+      })
+      .then( function(response) {
+        const result = response.data.genres;
+        
+        result.forEach((element) => {
+          self.genres[element.id] = element.name;
+        });
+        self.$forceUpdate();
+      })
+
+      axios
+        .get('https://api.themoviedb.org/3/genre/tv/list', {
+          params: {
+            api_key: '5f1d9b533544f75b3d29837feba9a687'
+          }
+        })
+        .then( function(response) {
+          const result = response.data.genres;
+
+          result.forEach((element) => {
+            self.genres[element.id] = element.name;
+          });
+          self.$forceUpdate();
+        })
   },
   methods: {
     search: function() {
