@@ -56,21 +56,30 @@
 
               <ul id="info-list-card">
                 <li><strong>Titolo:</strong> {{film.title || film.name}}</li>
+
                 <li><strong>Titolo originale:</strong> {{film.original_title || film.original_name}}</li>
+
                 <li><strong>Voto:</strong>
                   <i v-for="vote in averageVoteArray(film.vote_average)" class="fas fa-star"></i>
                   <i v-for="vote in (5 - averageVoteArray(film.vote_average))" class="far fa-star"></i>
                 </li>
+
                 <li><strong>Lingua:</strong>
                   <img v-if="film.original_language == 'en' || film.original_language == 'it' || film.original_language == 'de'" :src="film.flagLanguage" :alt="film.original_language">
                   <span v-else>{{film.original_language}}</span>
                 </li>
+
+                <li>
+                  <strong>Genere:</strong> {{setGenre(film.genre_ids)}}
+                </li>
+
                 <li>
                   <p><strong>Attori:</strong></p>
                   <ul>
                     <li v-for="character in film.cast">{{character}}</li>
                   </ul>
                 </li>
+
                 <li><strong>Overview:</strong> {{film.overview}}</li>
               </ul>
             </div>

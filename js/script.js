@@ -123,7 +123,7 @@ var app = new Vue({
                     }             
                   }
                   // forzo vue a fare il rendering
-                  self.$forceUpdate();  
+                  self.$forceUpdate(); 
                 })
             });
             // concateno dentro l'array dei film e delle serie le serie cercate con il proprio array cast di 5 attori
@@ -149,6 +149,16 @@ var app = new Vue({
     },
     orderByPopularity: function (a, b) {
      return b.popularity - a.popularity;
+    },
+    setGenre: function (genres) {
+      const self = this;
+      let string = "";
+
+      genres.forEach((element) => {
+        string += self.genres[element] + ", ";
+      });
+
+      return string.substr(0, string.length-2); 
     }
   }
 });

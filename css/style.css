@@ -19,7 +19,10 @@ header {
   width: 100%;
   height: 100px;
   background-color: black;
-  padding: 0px 60px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 110px;
+  padding-right: 100px;
 }
 
 #header-left {
@@ -125,7 +128,7 @@ header {
   width: 220px;
   height: 330px;
   /* border: solid lightgrey 1px; */
-  margin: 50px 20px;
+  margin: 50px 12px;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition-property: all;
