@@ -141,6 +141,10 @@ header {
   height: 100%;
 }
 
+.fas.fa-star {
+  color:#FFD700;
+}
+
 .card ::-webkit-scrollbar{
   width: 3px;
 }

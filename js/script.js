@@ -1,111 +1,104 @@
 var app = new Vue({
   el: "#root",
   data: {
-    filmToSearch: "",
+    filmName: "",
     prefixOfFilmUrl: "https://image.tmdb.org/t/p/w220_and_h330_face/",
     placeHolderImage: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
-    filmsArray: [],
-    seriesArray: [],
     filmsSeriesArray: [],
-    newFilmsSeriesArray: [],
-    averageVoteArray: [],
-    castArray: [],
     flagLanguage: ""
 
   },
   methods: {
-    searchFilm: function() {
-      var self = this;
+    search: function() {
+
+      const self = this;
+
+      self.filmsSeriesArray = [];
+
+      // cerco il film
       axios
         .get('https://api.themoviedb.org/3/search/movie', {
           params: {
             api_key: '5f1d9b533544f75b3d29837feba9a687',
-            query: self.filmToSearch
+            query: self.filmName
           }
         })
         .then( function(response) {
-          self.filmsArray = response.data.results;
-          self.filmsSeriesArray = self.filmsArray.concat(self.seriesArray);
-          self.filmsSeriesArray.sort(self.orederByPopularity);
-          // console.log(response.data.results);
+          const result = response.data.results;
 
-          for (var i = 0; i < self.filmsSeriesArray.length; i++) {
-            let averageCeilVote = Math.ceil(self.filmsSeriesArray[i].vote_average/2);
-            self.averageVoteArray.push(averageCeilVote)
-          }
-          self.toFlagLanguage();
-        })
-    },
-    searchTvSeries: function() {
-      var self = this;
-      axios
-        .get('https://api.themoviedb.org/3/search/tv', {
-          params: {
-            api_key: '5f1d9b533544f75b3d29837feba9a687',
-            query: self.filmToSearch
-          }
-        })
-        .then( function(response) {
-          self.seriesArray = response.data.results;
-          self.filmsSeriesArray = self.seriesArray.concat(self.filmsArray);
-          self.filmsSeriesArray.sort(self.orederByPopularity);
-          // console.log(response.data.results[0].name);
+          // ciclo sull'array dei film
+          result.forEach((element) => {
+            // creo un array cast dentro al mio film
+            element.cast = [];
 
-          for (var i = 0; i < self.filmsSeriesArray.length; i++) {
-            let averageCeilVote = Math.ceil(self.filmsSeriesArray[i].vote_average/2);
-            self.averageVoteArray.push(averageCeilVote)
-          }
-          self.toFlagLanguage();
-        })
-    },
-    searchMovieCast: function() {
-      var self = this;
-      axios
-        .get('https://api.themoviedb.org/3/movie/671/credits', {
-          params: {
-            api_key: '5f1d9b533544f75b3d29837feba9a687',
-          }
-        })
-        .then( function(response) {
-          let castArrayApi = response.data.cast;
-          // console.log(castArrayApi);
-          castArrayApi.forEach((item, i) => {
-            if (self.castArray.length < 5) {
-              self.castArray.push(item.name)
-            }
+            // per ogni film faccio richiesta del cast con id del film
+            axios
+              .get(`https://api.themoviedb.org/3/movie/${element.id}/credits`, {
+                params: {
+                  api_key: '5f1d9b533544f75b3d29837feba9a687',
+                }
+              })
+              .then( function(response) {
+                
+                // pusho nell'array i primi 5 nomi del cast per ogni film
+                for (let j = 0; j < 5; j++) {
+                  if (response.data.cast[j]) {
+                    element.cast.push(response.data.cast[j].name);
+                  }
+                }
+                // forzo vue a fare il rendering
+                self.$forceUpdate();
+              })
           });
+          // concateno dentro l'array dei film e delle serie i film cercati con il proprio array cast di 5 attori
+          self.filmsSeriesArray = self.filmsSeriesArray.concat(result);
+          self.filmsSeriesArray.sort(self.orderByPopularity);
+          self.toFlagLanguage();
+        }) // fine then film
 
-          self.newFilmsSeriesArray = self.filmsSeriesArray.map(
-            (element) => {
-              let characters = self.castArray;
-
-              const newFilmObj = {
-                ...element,
-                characters
-              };
-              console.log(newFilmObj);
-              return newFilmObj;
+        // cerco la serie tv
+        axios
+          .get('https://api.themoviedb.org/3/search/tv', {
+            params: {
+              api_key: '5f1d9b533544f75b3d29837feba9a687',
+              query: self.filmName
             }
-          )
-        })
-    },
-    searchSeriesCast: function() {
-      var self = this;
-      axios
-        .get('https://api.themoviedb.org/3/tv/"INSERIRE ID DEL FILM"/credits', {
-          params: {
-            api_key: '5f1d9b533544f75b3d29837feba9a687',
-          }
-        })
-        .then( function(response) {
+          })
+          .then( function(response) {
+            const result = response.data.results;
 
-        })
+            // ciclo sull'array delle serie
+            result.forEach((element) => {
+              // creo un array cast dentro alla serie
+              element.cast = [];
+
+              // per ogni serie faccio richiesta del cast con id della serie
+              axios
+                .get(`https://api.themoviedb.org/3/tv/${element.id}/credits`, {
+                  params: {
+                    api_key: '5f1d9b533544f75b3d29837feba9a687',
+                  }
+                })
+                .then( function(response) {                 
+                  
+                  // pusho nell'array i primi 5 nomi del cast per ogni serie
+                  for (let j = 0; j < 5; j++) {
+                    if(response.data.cast[j]) {
+                      element.cast.push(response.data.cast[j].name);
+                    }             
+                  }
+                  // forzo vue a fare il rendering
+                  self.$forceUpdate();  
+                })
+            });
+            // concateno dentro l'array dei film e delle serie le serie cercate con il proprio array cast di 5 attori
+            self.filmsSeriesArray = self.filmsSeriesArray.concat(result);
+            self.filmsSeriesArray.sort(self.orderByPopularity);
+            self.toFlagLanguage();  
+          }) // fine then serie tv
     },
-    startFunctions: function() {
-      this.filmsSeriesArray = [];
-      this.searchFilm();
-      this.searchTvSeries();
-      this.searchMovieCast();
+    averageVoteArray(vote) {
+      return Math.ceil(vote / 2);
     },
     toFlagLanguage: function() {
       for (var i = 0; i < this.filmsSeriesArray.length; i++) {
@@ -119,7 +112,7 @@ var app = new Vue({
         }
       }
     },
-    orederByPopularity: function (a, b) {
+    orderByPopularity: function (a, b) {
      return b.popularity - a.popularity;
     }
   }
