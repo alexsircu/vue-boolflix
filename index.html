@@ -42,7 +42,7 @@
           <ul class="list-inline">
             <li><a href="#"><i class="fas fa-gift"></i></a></li>
             <li><a href="#"><i class="fas fa-bell"></i></a></li>
-            <li><a href="#">USER</a></li>
+            <li><a href="#"><img src="img/avatar.png" alt="Avatar" id="avatar"></a></li>
           </ul>
         </div>
       </header>
@@ -54,7 +54,7 @@
               <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
               <img v-else :src="placeHolderImage" :alt="film.title || film.name" class="background-img-cover">
 
-              <ul id="info-list-card">
+              <ul class="info-list-card">
                 <li><strong>Titolo:</strong> {{film.title || film.name}}</li>
 
                 <li><strong>Titolo originale:</strong> {{film.original_title || film.original_name}}</li>
@@ -87,8 +87,14 @@
         </template>
 
         <template v-else>
-          <div>
-            <h1>ciao</h1>
+          <div class="cards-container">
+            <div class="card" v-for="film in popularFilmsSeries">
+              <img :src="prefixOfFilmUrl + film.poster_path" :alt="film.original_title">
+              
+              <ul class="info-list-card">
+                <li><strong>Titolo:</strong> {{film.title}}</li>
+              </ul>
+            </div>
           </div>
         </template>
       </main>

@@ -1,3 +1,5 @@
+const myApiKey = '5f1d9b533544f75b3d29837feba9a687';
+
 var app = new Vue({
   el: "#root",
   data: {
@@ -5,6 +7,7 @@ var app = new Vue({
     prefixOfFilmUrl: "https://image.tmdb.org/t/p/w220_and_h330_face/",
     placeHolderImage: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
     filmsSeriesArray: [],
+    popularFilmsSeries: [],
     flagLanguage: "",
     genres: {},
     selectedGenre: ""
@@ -13,10 +16,11 @@ var app = new Vue({
 
     const self = this;
 
+    // richiesta generi dei film
     axios
       .get('https://api.themoviedb.org/3/genre/movie/list', {
         params: {
-          api_key: '5f1d9b533544f75b3d29837feba9a687'
+          api_key: myApiKey
         }
       })
       .then( function(response) {
@@ -28,10 +32,11 @@ var app = new Vue({
         self.$forceUpdate();
       })
 
+      // richiesta generi serie tv
       axios
         .get('https://api.themoviedb.org/3/genre/tv/list', {
           params: {
-            api_key: '5f1d9b533544f75b3d29837feba9a687'
+            api_key: myApiKey
           }
         })
         .then( function(response) {
@@ -42,6 +47,23 @@ var app = new Vue({
           });
           self.$forceUpdate();
         })
+
+        //richiesta film più popolari
+        axios
+          .get('https://api.themoviedb.org/3/movie/popular', {
+            params: {
+              api_key: myApiKey
+            }
+          })
+          .then( function(response) {
+            const result = response.data.results;
+
+            // result.forEach((element) => {
+            //   self.popularFilmsSeries.push(element);
+            // });
+            self.popularFilmsSeries = self.popularFilmsSeries.concat(result);
+          })
+
   },
   methods: {
     search: function() {
@@ -54,7 +76,7 @@ var app = new Vue({
       axios
         .get('https://api.themoviedb.org/3/search/movie', {
           params: {
-            api_key: '5f1d9b533544f75b3d29837feba9a687',
+            api_key: myApiKey,
             query: self.filmName
           }
         })
@@ -70,7 +92,7 @@ var app = new Vue({
             axios
               .get(`https://api.themoviedb.org/3/movie/${element.id}/credits`, {
                 params: {
-                  api_key: '5f1d9b533544f75b3d29837feba9a687',
+                  api_key: myApiKey
                 }
               })
               .then( function(response) {
@@ -95,7 +117,7 @@ var app = new Vue({
         axios
           .get('https://api.themoviedb.org/3/search/tv', {
             params: {
-              api_key: '5f1d9b533544f75b3d29837feba9a687',
+              api_key: myApiKey,
               query: self.filmName
             }
           })
@@ -111,7 +133,7 @@ var app = new Vue({
               axios
                 .get(`https://api.themoviedb.org/3/tv/${element.id}/credits`, {
                   params: {
-                    api_key: '5f1d9b533544f75b3d29837feba9a687',
+                    api_key: myApiKey
                   }
                 })
                 .then( function(response) {                 
@@ -156,9 +178,11 @@ var app = new Vue({
 
       genres.forEach((element) => {
         string += self.genres[element] + ", ";
+        //salvo dentro string tutti i nome associati al dato id con una virgola dopo e lo spazio
       });
 
-      return string.substr(0, string.length-2); 
+      return string.substr(0, string.length-2);
+      //return della stringa togliendo però gli ultimi due caratteri, quindi lo spazio e la virgola 
     }
   }
 });

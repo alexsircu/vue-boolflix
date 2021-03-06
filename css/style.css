@@ -82,6 +82,12 @@ header {
   align-items: center;
 }
 
+#header-right .list-inline,
+#header-right .list-inline li a {
+  display: flex;
+  align-items: center;
+}
+
 #search-bar-container {
   color: white;
   margin-right: 20px;
@@ -107,6 +113,10 @@ header {
 
 #search-bar:focus {
   outline: none;
+}
+
+#avatar {
+  height: 36px;
 }
 
 #main {
@@ -142,7 +152,7 @@ header {
   border-radius: 5px;
 }
 
-#info-list-card {
+.info-list-card {
   position: absolute;
   top: 0;
   opacity: 0;
@@ -172,7 +182,7 @@ header {
   opacity: 1;
 }
 
-#info-list-card li > img {
+.info-list-card li > img {
   width: 20px;
   height: 100%;
 }
