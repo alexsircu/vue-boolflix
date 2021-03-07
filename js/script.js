@@ -62,6 +62,29 @@ var app = new Vue({
             const result = response.data.results;
 
             result.forEach((element) => {
+
+              //creo un nuovo array dentro il film
+              element.cast = [];
+
+              //richiesta del cast per ogni film
+              axios
+                .get(`https://api.themoviedb.org/3/movie/${element.id}/credits`, {
+                  params: {
+                    api_key: myApiKey
+                  }
+                })
+                .then( function(response) {
+                  
+                  for (let j = 0; j < 5; j++) {
+                    if (response.data.cast[j]) {
+                      //inserisco per ogni film i primi 5 attori dentro l'array del cast
+                      element.cast.push(response.data.cast[j].name);
+                    } 
+                  }
+                  // forzo vue a fare il rendering
+                  self.$forceUpdate();
+                })
+              //pusho nell'array i primi 7 film
               if (self.popularFilms.length < 7) {
                 self.popularFilms.push(element);
               }
@@ -83,7 +106,31 @@ var app = new Vue({
           .then( function(response) {
             const result = response.data.results;
 
+            //ciclo su ogni serie
             result.forEach((element) => {
+
+              //creo array cast dentro ogni serie
+              element.cast = [];
+
+              //richiesta degli attori per ogni serie
+              axios
+                .get(`https://api.themoviedb.org/3/tv/${element.id}/credits`, {
+                  params: {
+                    api_key: myApiKey
+                  }
+                })
+                .then( function(response) {
+
+                  for (let j = 0; j < 5; j++) {
+                    if (response.data.cast[j]) {
+                       //inserisco per ogni film i primi 5 attori dentro l'array del cast
+                      element.cast.push(response.data.cast[j].name)
+                    };
+                  }
+                  // forzo vue a fare il rendering
+                  self.$forceUpdate();
+                })
+              //pusho nell'array le prime 7 serie tv
               if (self.popularSeries.length < 7) {
                 self.popularSeries.push(element);
               }
@@ -106,9 +153,31 @@ var app = new Vue({
             const result = response.data.results;
 
             result.forEach((element) => {
+
+              element.cast = [];
+
+              axios
+                .get(`https://api.themoviedb.org/3/movie/${element.id}/credits`, {
+                  params: {
+                    api_key: myApiKey
+                  }
+                })
+                .then(function(response) {
+
+                  for (let j = 0; j < 5; j++) {
+                    if(response.data.cast[j]) {
+                      element.cast.push(response.data.cast[j].name);
+                    }                    
+                  }
+
+                  self.$forceUpdate();
+
+                })
+
               if (self.mostVotedFilms.length < 7) {
                 self.mostVotedFilms.push(element);
               }
+
             });
 
             self.getFlag();
@@ -128,9 +197,31 @@ var app = new Vue({
             const result = response.data.results;
 
             result.forEach((element) => {
+
+              element.cast = [];
+
+              axios
+              .get(`https://api.themoviedb.org/3/tv/${element.id}/credits`, {
+                params: {
+                  api_key: myApiKey
+                }
+              })
+              .then( function(response) {
+
+                for (let j = 0; j < 5; j++) {
+                  if (response.data.cast[j]) {
+                    element.cast.push(response.data.cast[j].name);
+                  }
+                }
+
+                self.$forceUpdate();
+
+              })
+                              
               if (self.mostVotedSeries.length < 7) {
                 self.mostVotedSeries.push(element);
               }
+
             });
 
             self.getFlag();
@@ -243,7 +334,9 @@ var app = new Vue({
         flag = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/1200px-Flag_of_Italy.svg.png";
       } else if (language == "de") {
         flag = "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg";
-      };
+      } else if (language == 'ko') {
+        flag = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/1920px-Flag_of_South_Korea.svg.png";
+      }
 
       return flag;
     },
