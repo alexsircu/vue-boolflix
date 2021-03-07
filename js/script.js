@@ -7,7 +7,10 @@ var app = new Vue({
     prefixOfFilmUrl: "https://image.tmdb.org/t/p/w220_and_h330_face/",
     placeHolderImage: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
     filmsSeriesArray: [],
-    popularFilmsSeries: [],
+    popularFilms: [],
+    popularSeries: [],
+    mostVotedFilms: [],
+    mostVotedSeries: [],
     flagLanguage: "",
     genres: {},
     selectedGenre: ""
@@ -58,11 +61,85 @@ var app = new Vue({
           .then( function(response) {
             const result = response.data.results;
 
-            // result.forEach((element) => {
-            //   self.popularFilmsSeries.push(element);
-            // });
-            self.popularFilmsSeries = self.popularFilmsSeries.concat(result);
+            result.forEach((element) => {
+              if (self.popularFilms.length < 7) {
+                self.popularFilms.push(element);
+              }
+            });
+
+            self.getFlag();
+            // self.popularFilmsSeries.sort(self.orderByPopularity);
+            // self.popularFilmsSeries = self.popularFilmsSeries.concat(result);
+                     
           })
+
+          // richiesta serie più popolari
+          axios
+          .get('https://api.themoviedb.org/3/tv/popular', {
+            params: {
+              api_key: myApiKey
+            }
+          })
+          .then( function(response) {
+            const result = response.data.results;
+
+            result.forEach((element) => {
+              if (self.popularSeries.length < 7) {
+                self.popularSeries.push(element);
+              }
+            });
+
+            self.getFlag();
+            // self.popularFilmsSeries.sort(self.orderByPopularity);
+            // self.popularFilmsSeries = self.popularFilmsSeries.concat(result);
+                     
+          })
+
+          //richiesta film più votati
+          axios
+          .get('https://api.themoviedb.org/3/movie/top_rated', {
+            params: {
+              api_key: myApiKey
+            }
+          })
+          .then( function(response) {
+            const result = response.data.results;
+
+            result.forEach((element) => {
+              if (self.mostVotedFilms.length < 7) {
+                self.mostVotedFilms.push(element);
+              }
+            });
+
+            self.getFlag();
+            // self.popularFilmsSeries.sort(self.orderByPopularity);
+            // self.popularFilmsSeries = self.popularFilmsSeries.concat(result);
+                     
+          })
+
+          //richiesta serie più votate
+          axios
+          .get('https://api.themoviedb.org/3/tv/top_rated', {
+            params: {
+              api_key: myApiKey
+            }
+          })
+          .then( function(response) {
+            const result = response.data.results;
+
+            result.forEach((element) => {
+              if (self.mostVotedSeries.length < 7) {
+                self.mostVotedSeries.push(element);
+              }
+            });
+
+            self.getFlag();
+            // self.popularFilmsSeries.sort(self.orderByPopularity);
+            // self.popularFilmsSeries = self.popularFilmsSeries.concat(result);
+                     
+          })
+
+
 
   },
   methods: {
@@ -110,7 +187,7 @@ var app = new Vue({
           // concateno dentro l'array dei film e delle serie i film cercati con il proprio array cast di 5 attori
           self.filmsSeriesArray = self.filmsSeriesArray.concat(result);
           self.filmsSeriesArray.sort(self.orderByPopularity);
-          self.toFlagLanguage();
+          self.getFlag();
         }) // fine then film
 
         // cerco la serie tv
@@ -151,23 +228,24 @@ var app = new Vue({
             // concateno dentro l'array dei film e delle serie le serie cercate con il proprio array cast di 5 attori
             self.filmsSeriesArray = self.filmsSeriesArray.concat(result);
             self.filmsSeriesArray.sort(self.orderByPopularity);
-            self.toFlagLanguage();  
+            self.getFlag();  
           }) // fine then serie tv
     },
     averageVoteArray(vote) {
       return Math.ceil(vote / 2);
     },
-    toFlagLanguage: function() {
-      for (var i = 0; i < this.filmsSeriesArray.length; i++) {
-        let filmLanguage = this.filmsSeriesArray[i].original_language;
-        if (filmLanguage == "en") {
-          this.filmsSeriesArray[i].flagLanguage = "https://upload.wikimedia.org/wikipedia/commons/f/f2/Flag_of_Great_Britain_%281707%E2%80%931800%29.svg";
-        } else if (filmLanguage == "it") {
-          this.filmsSeriesArray[i].flagLanguage = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/1200px-Flag_of_Italy.svg.png";
-        } else if (filmLanguage == "de") {
-          this.filmsSeriesArray[i].flagLanguage = "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg";
-        }
-      }
+    getFlag(language) {
+      let flag = "";
+
+      if(language == "en") {
+        flag = "https://upload.wikimedia.org/wikipedia/commons/f/f2/Flag_of_Great_Britain_%281707%E2%80%931800%29.svg";
+      } else if (language == "it") {
+        flag = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/1200px-Flag_of_Italy.svg.png";
+      } else if (language == "de") {
+        flag = "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg";
+      };
+
+      return flag;
     },
     orderByPopularity: function (a, b) {
      return b.popularity - a.popularity;
@@ -186,3 +264,5 @@ var app = new Vue({
     }
   }
 });
+
+

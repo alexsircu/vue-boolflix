@@ -12,6 +12,7 @@
 
 }
 
+/* header della pagina */
 header {
   display: flex;
   justify-content: space-between;
@@ -21,10 +22,11 @@ header {
   background-color: black;
   padding-top: 0px;
   padding-bottom: 0px;
-  padding-left: 110px;
+  padding-left: 118px;
   padding-right: 100px;
 }
 
+/* header di sinistra */
 #header-left {
   display: flex;
   align-items: center;
@@ -77,6 +79,7 @@ header {
   border-radius: 3px;
 }
 
+/* header di destra */
 #header-right {
   display: flex;
   align-items: center;
@@ -119,6 +122,7 @@ header {
   height: 36px;
 }
 
+/* main della pagina */
 #main {
   width: 100%;
   /* background-color: #434343; */
@@ -177,7 +181,7 @@ header {
   opacity: 0.3;
 }
 
-.card:hover #info-list-card {
+.card:hover .info-list-card {
   /* display: block; */
   opacity: 1;
 }
@@ -198,4 +202,24 @@ header {
 .card ::-webkit-scrollbar-thumb{
   background-color: lightgrey;
   border-radius: 3px;
+}
+
+/* più popolari */
+
+.popular-card-container {
+  display: flex;
+  justify-content: center;
+}
+
+.popular-container .section-titles {
+  color: white;
+  margin-left: 118px;
+}
+
+.card:hover .section-titles {
+  display: none;
+}
+
+.popular-card-container .card {
+  margin-top: 0;
 }

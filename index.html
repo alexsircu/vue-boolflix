@@ -7,11 +7,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.css" integrity="sha512-f73UKwzP1Oia45eqHpHwzJtFLpvULbhVpEJfaWczo/ZCV5NWSnK4vLDnjTaMps28ocZ05RbI83k2RlQH92zy7A==" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js" integrity="sha512-DZqqY3PiOvTP9HkjIWgjO6ouCbq+dxqWoJZ/Q+zPYNHmlnI2dQnbJ5bxAHpAMw+LXRm4D72EIRXzvcHQtE8/VQ==" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <!-- mio css -->
     <link rel="stylesheet" href="css/style.css">
     <title>Netflix</title>
   </head>
   <body>
     <div id="root">
+
+      <!-- HEADER DELLA PAGINA -->
+
       <header>
         <div id="header-left">
             <img src="img/logo-netflix.png" alt="logo" id="logo">
@@ -24,10 +28,12 @@
               <li><a href="#">Guarda di nuovo</a></li>
               <li>
                 <a href="#">
-                  <select class="select" v-model="selectedGenre">
-                    <option value="">Scegli genere</option>
-                    <option v-for="(genre, key) in genres" :value="key">{{ genre }}</option>
-                  </select>
+                  <template v-if="filmName">
+                    <select class="select" v-model="selectedGenre">
+                      <option value="">Scegli genere</option>
+                      <option v-for="(genre, key) in genres" :value="key">{{ genre }}</option>
+                    </select>
+                  </template>
                 </a>
               </li>
             </ul>
@@ -47,7 +53,12 @@
         </div>
       </header>
 
+      <!-- MAIN DELLA PAGINA -->
+
       <main id="main">
+
+        <!-- TEMPLATE DOPO RICERCA DELLA QUERY -->
+
         <template v-if="(filmName)">
           <div class="cards-container">
             <div v-for="(film, index) in filmsSeriesArray" v-if="film.genre_ids.includes(parseInt(selectedGenre)) || selectedGenre == ''" class="card">
@@ -65,8 +76,7 @@
                 </li>
 
                 <li><strong>Lingua:</strong>
-                  <img v-if="film.original_language == 'en' || film.original_language == 'it' || film.original_language == 'de'" :src="film.flagLanguage" :alt="film.original_language">
-                  <span v-else>{{film.original_language}}</span>
+                  <img :src="getFlag(film.original_language)" :alt="film.original_language">
                 </li>
 
                 <li>
@@ -86,19 +96,169 @@
           </div>
         </template>
 
+        <!-- TEMPLATE AL CARICAMENTO DELLA PAGINA -->
+
         <template v-else>
-          <div class="cards-container">
-            <div class="card" v-for="film in popularFilmsSeries">
-              <img :src="prefixOfFilmUrl + film.poster_path" :alt="film.original_title">
-              
+          <!-- film popolari -->
+          <div class="popular-container">
+            <h1 class="section-titles">Film più popolari</h1>
+            <div class="popular-card-container">
+              <div class="card" v-for="film in popularFilms">
+                <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
+              <img v-else :src="placeHolderImage" :alt="film.title || film.name" class="background-img-cover">
+
               <ul class="info-list-card">
-                <li><strong>Titolo:</strong> {{film.title}}</li>
+                <li><strong>Titolo:</strong> {{film.title || film.name}}</li>
+
+                <li><strong>Titolo originale:</strong> {{film.original_title || film.original_name}}</li>
+
+                <li><strong>Voto:</strong>
+                  <i v-for="vote in averageVoteArray(film.vote_average)" class="fas fa-star"></i>
+                  <i v-for="vote in (5 - averageVoteArray(film.vote_average))" class="far fa-star"></i>
+                </li>
+
+                <li><strong>Lingua:</strong>
+                  <img :src="getFlag(film.original_language)" :alt="film.original_language">
+                </li>
+
+                <li>
+                  <strong>Genere:</strong> {{setGenre(film.genre_ids)}}
+                </li>
+
+                <li>
+                  <p><strong>Attori:</strong></p>
+                  <ul>
+                    <li v-for="character in film.cast">{{character}}</li>
+                  </ul>
+                </li>
+
+                <li><strong>Overview:</strong> {{film.overview}}</li>
               </ul>
-            </div>
+              </div>
+            </div>            
           </div>
+
+          <!-- serie popolari -->
+          <div class="popular-container">
+            <h1 class="section-titles">Serie più popolari</h1>
+            <div class="popular-card-container">
+              <div class="card" v-for="film in popularSeries">
+                <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
+              <img v-else :src="placeHolderImage" :alt="film.title || film.name" class="background-img-cover">
+
+              <ul class="info-list-card">
+                <li><strong>Titolo:</strong> {{film.title || film.name}}</li>
+
+                <li><strong>Titolo originale:</strong> {{film.original_title || film.original_name}}</li>
+
+                <li><strong>Voto:</strong>
+                  <i v-for="vote in averageVoteArray(film.vote_average)" class="fas fa-star"></i>
+                  <i v-for="vote in (5 - averageVoteArray(film.vote_average))" class="far fa-star"></i>
+                </li>
+
+                <li><strong>Lingua:</strong>
+                  <img :src="getFlag(film.original_language)" :alt="film.original_language">
+                </li>
+
+                <li>
+                  <strong>Genere:</strong> {{setGenre(film.genre_ids)}}
+                </li>
+
+                <li>
+                  <p><strong>Attori:</strong></p>
+                  <ul>
+                    <li v-for="character in film.cast">{{character}}</li>
+                  </ul>
+                </li>
+
+                <li><strong>Overview:</strong> {{film.overview}}</li>
+              </ul>
+              </div>
+            </div>            
+          </div>
+
+            <!-- film più votati  -->
+            <div class="popular-container">
+              <h1 class="section-titles">Film più votati</h1>
+              <div class="popular-card-container">
+                <div class="card" v-for="film in mostVotedFilms">
+                  <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
+                <img v-else :src="placeHolderImage" :alt="film.title || film.name" class="background-img-cover">
+  
+                <ul class="info-list-card">
+                  <li><strong>Titolo:</strong> {{film.title || film.name}}</li>
+  
+                  <li><strong>Titolo originale:</strong> {{film.original_title || film.original_name}}</li>
+  
+                  <li><strong>Voto:</strong>
+                    <i v-for="vote in averageVoteArray(film.vote_average)" class="fas fa-star"></i>
+                    <i v-for="vote in (5 - averageVoteArray(film.vote_average))" class="far fa-star"></i>
+                  </li>
+  
+                  <li><strong>Lingua:</strong>
+                    <img :src="getFlag(film.original_language)" :alt="film.original_language">
+                  </li>
+  
+                  <li>
+                    <strong>Genere:</strong> {{setGenre(film.genre_ids)}}
+                  </li>
+  
+                  <li>
+                    <p><strong>Attori:</strong></p>
+                    <ul>
+                      <li v-for="character in film.cast">{{character}}</li>
+                    </ul>
+                  </li>
+  
+                  <li><strong>Overview:</strong> {{film.overview}}</li>
+                </ul>
+                </div>
+              </div>            
+            </div>
+
+            <!-- serie più votate  -->
+            <div class="popular-container">
+              <h1 class="section-titles">Serie più votate</h1>
+              <div class="popular-card-container">
+                <div class="card" v-for="film in mostVotedSeries">
+                  <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
+                <img v-else :src="placeHolderImage" :alt="film.title || film.name" class="background-img-cover">
+  
+                <ul class="info-list-card">
+                  <li><strong>Titolo:</strong> {{film.title || film.name}}</li>
+  
+                  <li><strong>Titolo originale:</strong> {{film.original_title || film.original_name}}</li>
+  
+                  <li><strong>Voto:</strong>
+                    <i v-for="vote in averageVoteArray(film.vote_average)" class="fas fa-star"></i>
+                    <i v-for="vote in (5 - averageVoteArray(film.vote_average))" class="far fa-star"></i>
+                  </li>
+  
+                  <li><strong>Lingua:</strong>
+                    <img :src="getFlag(film.original_language)" :alt="film.original_language">
+                  </li>
+  
+                  <li>
+                    <strong>Genere:</strong> {{setGenre(film.genre_ids)}}
+                  </li>
+  
+                  <li>
+                    <p><strong>Attori:</strong></p>
+                    <ul>
+                      <li v-for="character in film.cast">{{character}}</li>
+                    </ul>
+                  </li>
+  
+                  <li><strong>Overview:</strong> {{film.overview}}</li>
+                </ul>
+                </div>
+              </div>            
+            </div>
         </template>
       </main>
+
     </div>
-    <script src="js/script.js" charset="utf-8"></script>
+
+    <script src="js/script.js"></script>
   </body>
 </html>
