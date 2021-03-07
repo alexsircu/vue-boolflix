@@ -101,7 +101,7 @@
         <template v-else>
           <!-- film popolari -->
           <div class="popular-container">
-            <h1 class="section-titles">Film più popolari</h1>
+            <h2 class="section-titles">Film più popolari</h2>
             <div class="popular-card-container">
               <div class="card" v-for="film in popularFilms">
                 <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
@@ -140,7 +140,7 @@
 
           <!-- serie popolari -->
           <div class="popular-container">
-            <h1 class="section-titles">Serie più popolari</h1>
+            <h2 class="section-titles">Serie più popolari</h2>
             <div class="popular-card-container">
               <div class="card" v-for="film in popularSeries">
                 <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
@@ -179,7 +179,7 @@
 
             <!-- film più votati  -->
             <div class="popular-container">
-              <h1 class="section-titles">Film più votati</h1>
+              <h2 class="section-titles">Film più votati</h2>
               <div class="popular-card-container">
                 <div class="card" v-for="film in mostVotedFilms">
                   <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">
@@ -218,7 +218,7 @@
 
             <!-- serie più votate  -->
             <div class="popular-container">
-              <h1 class="section-titles">Serie più votate</h1>
+              <h2 class="section-titles">Serie più votate</h2>
               <div class="popular-card-container">
                 <div class="card" v-for="film in mostVotedSeries">
                   <img v-if="film.poster_path" :src="prefixOfFilmUrl + film.poster_path" :alt="film.title || film.name" class="background-img-cover">

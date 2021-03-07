@@ -217,7 +217,7 @@ var app = new Vue({
                 self.$forceUpdate();
 
               })
-                              
+
               if (self.mostVotedSeries.length < 7) {
                 self.mostVotedSeries.push(element);
               }

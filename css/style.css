@@ -22,7 +22,7 @@ header {
   background-color: black;
   padding-top: 0px;
   padding-bottom: 0px;
-  padding-left: 118px;
+  padding-left: 110px;
   padding-right: 100px;
 }
 
@@ -213,11 +213,7 @@ header {
 
 .popular-container .section-titles {
   color: white;
-  margin-left: 118px;
-}
-
-.card:hover .section-titles {
-  display: none;
+  margin-left: 110px;
 }
 
 .popular-card-container .card {
